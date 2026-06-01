@@ -1,0 +1,218 @@
+# Grasser KFZ – Website Relaunch: Planung & Konzept
+
+## Context
+
+Die bestehende Website kfz-grasser.de läuft auf Jimdo (CMS-Builder, stark limitiert) und entspricht weder technisch noch visuell dem Anspruch des Unternehmens. Grasser Cars · Sales · Services ist ein Spezialwerkstatt- und Händlerbetrieb mit echter Expertise in Porsche, Audi RS, Sport- und Premiumfahrzeugen – das kommt auf der aktuellen Website kaum rüber. Der Relaunch soll eine moderne, performante Website schaffen, die solvente Käufer von Sportwagen und Luxusfahrzeugen anspricht. Referenz-Design: [stimpfig.de](https://stimpfig.de/).
+
+---
+
+## Phase 1 – Status Quo (abgeschlossen)
+
+### Unternehmensdaten (aus kfz-grasser.de)
+
+| Feld | Wert |
+|------|------|
+| Firma | Grasser Cars · Sales · Services |
+| Inhaber | Fabian Grasser |
+| Adresse | Crailsheimer Straße 10, 90574 Roßtal |
+| Telefon | 09127/95023 / 0171/1254528 |
+| E-Mail | grasser@gmx.de |
+| Öffnungszeiten | Mo–Fr 08–17 Uhr, Sa 09–12 Uhr |
+| Steuernr. | 218-222-11574 |
+| USt-ID | DE307032289 |
+
+### Aktuelle Seitenstruktur (Jimdo, 5 Seiten)
+
+1. **Homepage** – Willkommen, Slider, 3 Spalten (Wer wir sind / Was wir tun / Kontakt)
+2. **Öffnungszeiten** – Tabelle
+3. **Kontakt** – Formular
+4. **Leistungen im Überblick** – Preisliste Standardservices
+5. **Grasser's Sportwagenservice** – Porsche/Audi-Spezialservices mit Preisen
+6. **Aktuelle Gebrauchtwagen** – Externer Link auf mobile.de
+
+### Leistungsportfolio (vollständig)
+
+**Standardservices:**
+- Inspektion ab €45 + Material
+- Radwechsel €24,90 / Reifeneinlagerung €59,90
+- Bremsenflüssigkeit ab €39,90
+- Fahrwerkvermessung ab €64,90
+- Zahnriemenwechsel ab €174,90
+- Smart Repair: Dellen ab €49,90, Lackaufbereitung ab €99
+- TÜV/HU 3× pro Woche im Haus
+- Cabrioverdeckaufbereitung
+- Glas/Windschutzscheibe
+
+**Grasser's Sportwagenservice (Premium-Segment):**
+- Porsche-Inspektion (911/964/993/996/997/991/992) ab €249,90
+- Kupplungstausch 996/997/991 ab €999
+- PDK-Wartung & Ölservice
+- Audi S-Tronic Service & Ölwechsel
+- Fahrwerkabstimmung (Rundstreckentauglichkeit)
+- Bilstein & KW Fahrwerkinstallation
+- AUDI/VW/SEAT/SKODA/PORSCHE Assistenzsystem-Kalibrierung
+- Fahrzeugaufbereitung Innen/Außen ab €190
+- Abhol- und Bringservice (geschlossener Trailer)
+
+### Stärken der bestehenden Site
+
+- Klare Preisstruktur (gut für Lead-Generierung, beibehalten)
+- HTTPS / Cloudflare / CDN bereits aktiv
+- Responsive Design vorhanden (wenn auch veraltet)
+- Kontaktdaten gut sichtbar
+
+### Schwächen / Verbesserungspotenzial
+
+- Jimdo = keine Designfreiheit, kein Custom Code, Vendor Lock-in
+- Kein integriertes Fahrzeuginventar (nur externer mobile.de Link)
+- Null Social Proof / Kundenbewertungen / Referenzen
+- Keine Terminbuchung
+- Kein Team/Story-Bereich
+- Schlechtes SEO (falscher Ortsname Zirndorf statt Roßtal in Meta-Tags, keine Schema-Daten)
+- Kein Englisch
+- E-Mail gmx.de wirkt unprofessionell
+
+---
+
+## Phase 2 – Design-Konzept (abgeleitet aus stimpfig.de-Analyse)
+
+### Zielgruppe
+
+**Primär:** Solvente Käufer von Sportwagen und Premiumautos (Porsche, Audi RS, Mercedes AMG, BMW M). Typischerweise 35–60 Jahre, unternehmerisch oder leitend tätig, kaufen Autos als Passion/Lifestyle.
+
+**Sekundär:** Bestandskunden, die hochwertige Werkstattleistung für ihre Sportwagen suchen (nicht Billigwerkstatt).
+
+### Design-Richtung (inspiriert von stimpfig.de)
+
+| Element | Ansatz |
+|---------|--------|
+| Farbpalette | Weiß/Hellgrau Hintergrund, Dunkelgrau/Schwarz Typographie, dezente Akzentfarbe (z.B. Anthrazit oder Gold) |
+| Fotografie | Hochwertige Fahrzeugfotos, Werkstatt-Atmosphäre, Fabian Grasser persönlich |
+| Typographie | Serifenlose, klare Schriften (z.B. Inter, Neue Haas Grotesk oder ähnlich) |
+| Sprache | Emotionslos-elegant, Käufer-Intelligenz voraussetzen, kein Urgency-Sprech |
+| Navigation | Flat (6 Punkte max), sticky, kein Dropdown-Chaos |
+| Hero | Card-basiert mit Service-Pillars (nicht Bild-Slider) ODER großes Fahrzeugfoto mit minimalem Text |
+| Inventory | Grid-Layout, 3–4 Spalten Desktop, Bildkarten ohne Preis sichtbar (Kontakt zum Preis) |
+| Zweisprachig | DE/EN Toggle |
+
+### Was NICHT gebaut werden soll (Luxus-Anti-Pattern)
+
+- Kein "JETZT ANGEBOT SICHERN!" / Countdown-Timer
+- Keine Popup-Formulare
+- Kein billiger Testimonial-Block mit Stockfotos
+- Keine Finanzierungsrechner (signalisiert falsches Kundensegment)
+- Kein Autowechsel-Slider (veraltet)
+- Keine grellen Farben / Sale-Badges
+
+---
+
+## Phase 3 – Seitenstruktur (neu)
+
+```
+/                          → Homepage
+/fahrzeuge                 → Fahrzeuginventar (Custom CMS)
+/fahrzeuge/[slug]          → Einzelnes Fahrzeug
+/sportwagenservice         → Porsche/Audi Premium Service (USP-Seite)
+/leistungen                → Alle Werkstattleistungen mit Preisen
+/referenzen                → Verkaufte Fahrzeuge / Portfolio (wie stimpfig.de)
+/ueber-uns                 → Fabian Grasser, Team, Story, Standort
+/kontakt                   → Kontakt + Google Maps + Terminanfrage
+/impressum                 → Pflichtseite
+/datenschutz               → Pflichtseite
+
+[EN Mirror]
+/en/                       → Homepage EN
+/en/vehicles               → ...
+```
+
+---
+
+## Phase 4 – Features & Funktionen
+
+### Must-Have (MVP)
+
+- [ ] Fahrzeuginventar mit CMS (Marke, Modell, Jahr, km, Preis optional, Bilder, Beschreibung)
+- [ ] Zweisprachigkeit DE/EN
+- [ ] Kontaktformular mit Terminanfrage
+- [ ] Google Maps Integration
+- [ ] SEO: LocalBusiness Schema, OpenGraph, korrekte Meta-Tags (Ort: Roßtal)
+- [ ] Mobile-first responsive Design
+- [ ] HTTPS + Cloudflare (beibehalten)
+- [ ] Impressum / Datenschutz (DSGVO-konform)
+- [ ] Cookie-Banner (DSGVO)
+- [ ] Professionelle E-Mail-Adresse (nicht gmx.de)
+
+### Nice-to-Have
+
+- [ ] Terminbuchungssystem (z.B. Calendly-Integration oder custom)
+- [ ] Referenzgalerie "verkaufte Fahrzeuge" mit sold-Badge
+- [ ] Newsletter (Footer, subtil)
+- [ ] Google Reviews Widget
+- [ ] Instagram Feed Integration
+- [ ] Before/After Aufbereitungsgalerie
+
+---
+
+## Phase 5 – Tech Stack (Entscheidung ausstehend)
+
+Tech-Stack-Entscheidung wird in separatem Schritt getroffen. Empfehlung vorbereitet:
+
+**Option A – Next.js (App Router) + Headless CMS (z.B. Sanity oder Contentful)**
+- Maximale Performance (Static Generation)
+- Vollständige Designfreiheit
+- Inventory als CMS-Collection verwaltbar
+- Deployment: Vercel
+- Vorteil: Kunde kann Fahrzeuge selbst verwalten
+- Nachteil: Entwicklungsaufwand höher
+
+**Option B – Astro + Decap CMS (ehemals Netlify CMS)**
+- Noch performanter (0 JS by default)
+- Einfacheres CMS für kleinen Betrieb
+- Git-basiertes Content Management
+- Deployment: Netlify oder Vercel
+
+**Option C – WordPress + Custom Theme (Blocksy/Genesis)**
+- Vertrauteres Backend für Kunden
+- Mehr Plugins verfügbar
+- Performance-Kompromisse
+
+---
+
+## Phase 6 – CLAUDE.md erstellen
+
+Nach Freigabe des Plans wird eine `CLAUDE.md` im Projektverzeichnis angelegt mit:
+
+- Projektkontext und Zielgruppe
+- Branding-Guidelines
+- Technische Entscheidungen (sobald getroffen)
+- Seitenstruktur und Namenskonventionen
+- Verhaltensregeln für den AI-Agenten (Tonalität, was erlaubt/verboten ist)
+- Ressourcen (Farben, Fonts, Bildquellen)
+
+---
+
+## Offene Punkte / Klärungsbedarf
+
+1. **Fotomaterial**: Gibt es bereits hochwertige Fahrzeugfotos und Werkstattbilder von Fabian Grasser? Oder ist ein Fotoshooting notwendig?
+2. **Logo/Branding**: Soll das bestehende Logo übernommen oder neu gestaltet werden?
+3. **Domainpflege**: kfz-grasser.de bleibt bestehen. Hosting-Umzug von Jimdo zu eigenem Hosting nötig.
+4. **CMS-Bedienung**: Wie technisch affin ist Fabian Grasser? (Beeinflusst CMS-Wahl)
+5. **Budget & Timeline**: Noch offen.
+
+---
+
+## Verifikation (wie testen wir das Ergebnis)
+
+1. **Lighthouse Score** ≥ 90 (Performance, Accessibility, SEO, Best Practices)
+2. **Mobile Rendering** auf iPhone und Android getestet (Playwright / manuell)
+3. **Schema Markup** validiert via Google Rich Results Test
+4. **Zweisprachigkeit** funktioniert ohne JS-Fehler
+5. **Kontaktformular** sendet korrekte E-Mails
+6. **Inventory CRUD** – Fahrzeug anlegen, bearbeiten, löschen im CMS
+7. **Cross-Browser**: Chrome, Safari, Firefox
+
+---
+
+## Nächster Schritt
+
+→ **CLAUDE.md anlegen** im Projektverzeichnis mit allem oben Dokumentierten als Basis für die Umsetzungsphase.
