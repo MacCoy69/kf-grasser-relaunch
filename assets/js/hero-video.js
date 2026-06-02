@@ -29,17 +29,21 @@
       (navigator.maxTouchPoints > 1 && window.matchMedia('(pointer: coarse)').matches);
 
     if (isMobile) {
-      // Hide canvas, ensure mobile video is visible
+      // Mobile: ein Durchlauf, dann Standbild auf erstem Frame
       canvas.style.display = 'none';
       if (mobileVideo) {
         mobileVideo.style.display = 'block';
-        // Try to start playback (autoplay may be blocked until interaction)
-        mobileVideo.play().catch(() => {
-          // Silently fail — poster will show until user interacts
+        mobileVideo.loop = false; // sicherstellen, kein Loop
+
+        // Wenn Video durchgelaufen ist → zurück auf Frame 0 und pausieren
+        mobileVideo.addEventListener('ended', () => {
+          mobileVideo.currentTime = 0;
+          mobileVideo.pause();
         });
+
+        // Autoplay versuchen — bei Blockade wird das Poster (erstes Frame) gezeigt
+        mobileVideo.play().catch(() => {});
       }
-      // Still wire up the text outro animation
-      bindTextOutro();
       return;
     }
 
@@ -81,17 +85,13 @@
     videoTexture.magFilter = THREE.LinearFilter;
     videoTexture.colorSpace = THREE.SRGBColorSpace;
 
-    // Cinematic Shader: Vignette + Film Grain
+    // Cinematic Shader: nur dezente Vignette (Grain entfernt → kein Flackern)
     const uniforms = {
       uVideo:        { value: videoTexture },
-      uTime:         { value: 0 },
       uResolution:   { value: new THREE.Vector2(canvas.clientWidth, canvas.clientHeight) },
       uVideoAspect:  { value: 16 / 9 },
-      // Reduziert: weniger Grain-Amplitude, langsamere Animation → kein Flackern
-      uGrainAmount:  { value: 0.018 },
-      uGrainSpeed:   { value: 8.0 },
-      uVignetteSize: { value: 0.88 },
-      uVignetteSoft: { value: 0.6 }
+      uVignetteSize: { value: 0.95 },
+      uVignetteSoft: { value: 0.65 }
     };
 
     const vertexShader = `
@@ -106,21 +106,13 @@
       precision highp float;
       varying vec2 vUv;
       uniform sampler2D uVideo;
-      uniform float uTime;
       uniform vec2 uResolution;
       uniform float uVideoAspect;
-      uniform float uGrainAmount;
-      uniform float uGrainSpeed;
       uniform float uVignetteSize;
       uniform float uVignetteSoft;
 
-      // Hash for grain (stable seed)
-      float hash(vec2 p) {
-        return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
-      }
-
       void main() {
-        // Cover-fit: match video aspect to screen aspect (object-fit:cover)
+        // Cover-fit: match video aspect to screen aspect
         float screenAspect = uResolution.x / uResolution.y;
         vec2 uv = vUv;
 
@@ -132,20 +124,13 @@
           uv.x = (uv.x - 0.5) * scale + 0.5;
         }
 
-        // Sample video
         vec4 color = texture2D(uVideo, uv);
 
-        // ── Vignette (radial darkening at edges) ──
+        // ── Vignette — sehr dezent, nur ganz leichtes Abdunkeln der Ecken ──
         vec2 vigUv = vUv - 0.5;
         float dist = length(vigUv);
         float vignette = smoothstep(uVignetteSize, uVignetteSize - uVignetteSoft, dist);
-        color.rgb *= mix(0.85, 1.0, vignette);
-
-        // ── Film Grain — quantisierte Zeit (steppt alle 1/12s)
-        // Verhindert dass das Grain bei jedem Frame neu wackelt
-        float grainTime = floor(uTime * uGrainSpeed) / uGrainSpeed;
-        float grain = hash(vUv * uResolution + grainTime * 100.0);
-        color.rgb += (grain - 0.5) * uGrainAmount;
+        color.rgb *= mix(0.92, 1.0, vignette);
 
         gl_FragColor = vec4(color.rgb, 1.0);
       }
@@ -208,46 +193,41 @@
       }
     });
 
-    // ── Frame-Update-Tracking ────────────────────────────
-    // Wenn das Video einen neuen Frame präsentiert (egal ob durch play()
-    // oder seek), markieren wir die Texture als update-needed
+    // ── On-Demand Rendering ─────────────────────────────
+    // Da kein animiertes Uniform (Grain weg) ist, brauchen wir keine
+    // 60Hz rAF Loop mehr. Wir rendern nur, wenn:
+    //  (a) ein neuer Video-Frame präsentiert wird (rVFC),
+    //  (b) ein Seek abgeschlossen ist,
+    //  (c) Resize passiert.
+    // Das eliminiert jegliches Restflackern durch wiederholtes Texture-Upload.
+
+    function renderOnce() {
+      if (!isVisible) return;
+      videoTexture.needsUpdate = true;
+      renderer.render(scene, camera);
+    }
+
     const useVideoFrameCallback = 'requestVideoFrameCallback' in HTMLVideoElement.prototype;
 
     if (useVideoFrameCallback) {
       const onVideoFrameCallback = () => {
-        videoTexture.needsUpdate = true;
+        renderOnce();
         video.requestVideoFrameCallback(onVideoFrameCallback);
       };
       video.requestVideoFrameCallback(onVideoFrameCallback);
+    } else {
+      // Fallback ohne rVFC: minimaler 30Hz Loop
+      const renderInterval = setInterval(renderOnce, 33);
     }
 
-    // Beim Seek (durch GSAP-Scrub) explizit Texture refreshen
-    video.addEventListener('seeked', () => {
-      videoTexture.needsUpdate = true;
-    });
+    // Beim Seek (durch GSAP-Scrub) explizit re-rendern
+    video.addEventListener('seeked', renderOnce);
 
-    // ── Render Loop ──────────────────────────────────────
-    // Render läuft entkoppelt von Video-Updates — Shader-Uniforms
-    // (Time, Grain) brauchen kontinuierlichen Render, aber das Video
-    // wird nur aktualisiert wenn ein neuer Frame ready ist
-    const startTime = performance.now();
+    // Initial-Render sobald Video bereit ist
+    if (video.readyState >= 2) renderOnce();
+    else video.addEventListener('loadeddata', renderOnce, { once: true });
 
-    function renderFrame() {
-      uniforms.uTime.value = (performance.now() - startTime) * 0.001;
-      // Fallback: wenn rVFC nicht verfügbar, jeden 2. Frame Texture refresh
-      if (!useVideoFrameCallback) {
-        videoTexture.needsUpdate = true;
-      }
-      renderer.render(scene, camera);
-    }
-
-    function loop() {
-      if (isVisible) renderFrame();
-      requestAnimationFrame(loop);
-    }
-    requestAnimationFrame(loop);
-
-    // ── IntersectionObserver: pause when hero out of view ─
+    // ── IntersectionObserver: skip rendering when hero out of view ─
     const io = new IntersectionObserver((entries) => {
       entries.forEach(e => { isVisible = e.isIntersecting; });
     }, { threshold: 0 });
@@ -260,6 +240,7 @@
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.setSize(w, h, false);
       uniforms.uResolution.value.set(w, h);
+      renderOnce();
       if (scrollTriggerInstance && scrollTriggerInstance.scrollTrigger) {
         scrollTriggerInstance.scrollTrigger.refresh();
       }
@@ -267,55 +248,20 @@
     window.addEventListener('resize', handleResize, { passive: true });
     window.addEventListener('orientationchange', handleResize, { passive: true });
 
-    // ── Text Outro Animation ─────────────────────────────
-    bindTextOutro();
+    // Text Outro Animation entfernt — Headlines bleiben statisch im Hero
 
     // ── Fallback if Three.js fails for some reason ──────
     function fallbackToNativeVideo() {
       canvas.style.display = 'none';
       if (mobileVideo) {
         mobileVideo.style.display = 'block';
+        mobileVideo.loop = false;
+        mobileVideo.addEventListener('ended', () => {
+          mobileVideo.currentTime = 0;
+          mobileVideo.pause();
+        });
         mobileVideo.play().catch(() => {});
       }
-      bindTextOutro();
-    }
-  }
-
-  // ── Text Outro: Eyebrow → Title → Tagline fly up out ──
-  function bindTextOutro() {
-    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-
-    const eyebrowSpan = document.querySelector('.hero__eyebrow span');
-    const titleSpans  = document.querySelectorAll('.hero__title span');
-    const taglineSpan = document.querySelector('.hero__tagline span');
-    const actions     = document.querySelector('.hero__actions');
-    const scrollHint  = document.querySelector('.hero__scroll');
-
-    // Wait for intro animation to finish (heroTl runs ~2.5s on load)
-    // ScrollTrigger handles the rest based on scroll position
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '#start',
-        start: 'top top',
-        end: 'bottom top',
-        scrub: 0.6
-      }
-    });
-
-    if (eyebrowSpan) {
-      tl.to(eyebrowSpan, { yPercent: -130, ease: 'none' }, 0);
-    }
-    if (titleSpans.length) {
-      tl.to(titleSpans, { yPercent: -130, stagger: 0.05, ease: 'none' }, 0.05);
-    }
-    if (taglineSpan) {
-      tl.to(taglineSpan, { yPercent: -110, ease: 'none' }, 0.15);
-    }
-    if (actions) {
-      tl.to(actions, { y: -60, opacity: 0, ease: 'none' }, 0.1);
-    }
-    if (scrollHint) {
-      tl.to(scrollHint, { opacity: 0, y: 30, ease: 'none' }, 0);
     }
   }
 })();

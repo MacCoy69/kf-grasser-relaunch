@@ -190,14 +190,13 @@
         class="hero__canvas-video"
         aria-hidden="true"></canvas>
 
-      <!-- Mobile fallback: native autoplay loop -->
+      <!-- Mobile: einmal abspielen, dann auf erstem Frame stehen bleiben -->
       <video
         class="hero__video-mobile"
         autoplay
         muted
-        loop
         playsinline
-        preload="metadata"
+        preload="auto"
         poster="images/hero-bg.jpg"
         aria-hidden="true">
         <source src="videos/porsche-hero-section-video.mp4" type="video/mp4">
