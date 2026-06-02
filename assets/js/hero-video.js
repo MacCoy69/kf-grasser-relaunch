@@ -87,9 +87,11 @@
       uTime:         { value: 0 },
       uResolution:   { value: new THREE.Vector2(canvas.clientWidth, canvas.clientHeight) },
       uVideoAspect:  { value: 16 / 9 },
-      uGrainAmount:  { value: 0.035 },
-      uVignetteSize: { value: 0.85 },
-      uVignetteSoft: { value: 0.55 }
+      // Reduziert: weniger Grain-Amplitude, langsamere Animation → kein Flackern
+      uGrainAmount:  { value: 0.018 },
+      uGrainSpeed:   { value: 8.0 },
+      uVignetteSize: { value: 0.88 },
+      uVignetteSoft: { value: 0.6 }
     };
 
     const vertexShader = `
@@ -108,10 +110,11 @@
       uniform vec2 uResolution;
       uniform float uVideoAspect;
       uniform float uGrainAmount;
+      uniform float uGrainSpeed;
       uniform float uVignetteSize;
       uniform float uVignetteSoft;
 
-      // Hash for grain
+      // Hash for grain (stable seed)
       float hash(vec2 p) {
         return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
       }
@@ -122,11 +125,9 @@
         vec2 uv = vUv;
 
         if (screenAspect > uVideoAspect) {
-          // Screen wider than video — fit width, crop top/bottom
           float scale = uVideoAspect / screenAspect;
           uv.y = (uv.y - 0.5) * scale + 0.5;
         } else {
-          // Screen taller than video — fit height, crop left/right
           float scale = screenAspect / uVideoAspect;
           uv.x = (uv.x - 0.5) * scale + 0.5;
         }
@@ -138,10 +139,12 @@
         vec2 vigUv = vUv - 0.5;
         float dist = length(vigUv);
         float vignette = smoothstep(uVignetteSize, uVignetteSize - uVignetteSoft, dist);
-        color.rgb *= mix(0.78, 1.0, vignette);
+        color.rgb *= mix(0.85, 1.0, vignette);
 
-        // ── Film Grain (animated noise) ──
-        float grain = hash(vUv * uResolution + uTime * 100.0);
+        // ── Film Grain — quantisierte Zeit (steppt alle 1/12s)
+        // Verhindert dass das Grain bei jedem Frame neu wackelt
+        float grainTime = floor(uTime * uGrainSpeed) / uGrainSpeed;
+        float grain = hash(vUv * uResolution + grainTime * 100.0);
         color.rgb += (grain - 0.5) * uGrainAmount;
 
         gl_FragColor = vec4(color.rgb, 1.0);
@@ -161,13 +164,13 @@
     // ── Video Ready & Scroll Wiring ──────────────────────
     let scrollTriggerInstance = null;
     let isVisible = true;
+    let videoFrameReady = false; // True when a fresh decoded frame is available
 
     function setupScrollScrub() {
       if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
         console.warn('[Hero Video] GSAP/ScrollTrigger not loaded');
         return;
       }
-      // Map scroll progress → video.currentTime
       scrollTriggerInstance = gsap.to(video, {
         currentTime: video.duration || 8,
         ease: 'none',
@@ -175,23 +178,66 @@
           trigger: heroSection,
           start: 'top top',
           end: 'bottom top',
-          scrub: 0.6,
+          scrub: 0.8, // etwas mehr Smoothing → ruhigeres Scrubben
           invalidateOnRefresh: true
         }
       });
     }
 
+    // Decoder-Init Trick: play() + pause() initialisiert den Decoder,
+    // damit currentTime-Sets später sofort dekodieren statt zu warten
     video.addEventListener('loadedmetadata', () => {
       uniforms.uVideoAspect.value = video.videoWidth / video.videoHeight;
-      setupScrollScrub();
+
+      // Force decoder warmup
+      const playPromise = video.play();
+      if (playPromise && playPromise.then) {
+        playPromise.then(() => {
+          video.pause();
+          video.currentTime = 0;
+          videoFrameReady = true;
+          setupScrollScrub();
+        }).catch(() => {
+          // Fallback if autoplay blocked
+          videoFrameReady = true;
+          setupScrollScrub();
+        });
+      } else {
+        videoFrameReady = true;
+        setupScrollScrub();
+      }
+    });
+
+    // ── Frame-Update-Tracking ────────────────────────────
+    // Wenn das Video einen neuen Frame präsentiert (egal ob durch play()
+    // oder seek), markieren wir die Texture als update-needed
+    const useVideoFrameCallback = 'requestVideoFrameCallback' in HTMLVideoElement.prototype;
+
+    if (useVideoFrameCallback) {
+      const onVideoFrameCallback = () => {
+        videoTexture.needsUpdate = true;
+        video.requestVideoFrameCallback(onVideoFrameCallback);
+      };
+      video.requestVideoFrameCallback(onVideoFrameCallback);
+    }
+
+    // Beim Seek (durch GSAP-Scrub) explizit Texture refreshen
+    video.addEventListener('seeked', () => {
+      videoTexture.needsUpdate = true;
     });
 
     // ── Render Loop ──────────────────────────────────────
+    // Render läuft entkoppelt von Video-Updates — Shader-Uniforms
+    // (Time, Grain) brauchen kontinuierlichen Render, aber das Video
+    // wird nur aktualisiert wenn ein neuer Frame ready ist
     const startTime = performance.now();
 
     function renderFrame() {
       uniforms.uTime.value = (performance.now() - startTime) * 0.001;
-      videoTexture.needsUpdate = true;
+      // Fallback: wenn rVFC nicht verfügbar, jeden 2. Frame Texture refresh
+      if (!useVideoFrameCallback) {
+        videoTexture.needsUpdate = true;
+      }
       renderer.render(scene, camera);
     }
 
