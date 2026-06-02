@@ -258,16 +258,6 @@
     window.addEventListener('resize', handleResize, { passive: true });
     window.addEventListener('orientationchange', handleResize, { passive: true });
 
-    // ── Scroll-Synced Audio ─────────────────────────────
-    // Audio läuft mit dem scroll-driven Video parallel:
-    //  – Initial muted (Browser-Policy: kein Autoplay-Audio)
-    //  – Erst nach Klick auf Mute-Button wird Audio entsperrt
-    //  – Audio.currentTime wird kontinuierlich an video.currentTime
-    //    gekoppelt (kleine Drift wird korrigiert)
-    //  – Während aktivem Scroll-Movement spielt Audio,
-    //    während Stillstand pausiert es
-    setupHeroAudio(video);
-
     // Text Outro Animation entfernt — Headlines bleiben statisch im Hero
 
     // ── Fallback if Three.js fails for some reason ──────
@@ -283,101 +273,5 @@
         mobileVideo.play().catch(() => {});
       }
     }
-  }
-
-  // ────────────────────────────────────────────────────────
-  // Audio Sync & Toggle
-  // ────────────────────────────────────────────────────────
-  function setupHeroAudio(video) {
-    const audio  = document.getElementById('hero-audio');
-    const toggle = document.getElementById('hero-audio-toggle');
-    if (!audio || !toggle) return;
-
-    let audioUnlocked = false; // True nachdem User einmal auf Mute-Button geklickt hat
-    let scrollIdleTimer = null;
-    let isAudioPlaying = false;
-
-    // Toggle-Click: Audio entsperren oder muten
-    toggle.addEventListener('click', () => {
-      if (!audioUnlocked) {
-        // Erstklick: muted entfernen, einmal play+pause aufrufen, damit
-        // der Browser Audio dauerhaft erlaubt
-        audio.muted = false;
-        audio.currentTime = video.currentTime;
-        const p = audio.play();
-        if (p && p.then) {
-          p.then(() => {
-            // Sofort wieder pausieren — wir starten nur bei Scroll
-            if (!isCurrentlyScrolling()) audio.pause();
-            audioUnlocked = true;
-            toggle.classList.add('is-on');
-            toggle.setAttribute('aria-pressed', 'true');
-            toggle.setAttribute('aria-label', 'Ton ausschalten');
-          }).catch(err => {
-            console.warn('[Hero Audio] play blocked:', err);
-          });
-        }
-        return;
-      }
-
-      // Zweiter+ Klick: An/Aus toggeln
-      const turningOn = !toggle.classList.contains('is-on');
-      toggle.classList.toggle('is-on', turningOn);
-      toggle.setAttribute('aria-pressed', String(turningOn));
-      toggle.setAttribute('aria-label', turningOn ? 'Ton ausschalten' : 'Ton einschalten');
-      audio.muted = !turningOn;
-      if (!turningOn) audio.pause();
-    });
-
-    // Audio-Zeit kontinuierlich an Video-Zeit anpassen
-    // (passiert via ScrollTrigger-Updates — wir hängen uns an die rVFC + seeked Events)
-    function syncAudioTime() {
-      if (!audioUnlocked || audio.muted) return;
-      const drift = Math.abs(audio.currentTime - video.currentTime);
-      // Bei >150ms Drift: hart resyncen
-      if (drift > 0.15) {
-        audio.currentTime = video.currentTime;
-      }
-    }
-
-    // Scroll-Activity Detection — Audio läuft nur wenn aktiv gescrollt wird
-    function isCurrentlyScrolling() {
-      return scrollIdleTimer !== null;
-    }
-
-    function onScrollActivity() {
-      if (!audioUnlocked || !toggle.classList.contains('is-on')) return;
-
-      // Audio starten falls noch nicht
-      if (!isAudioPlaying && audio.paused) {
-        syncAudioTime();
-        const p = audio.play();
-        if (p && p.then) p.catch(() => {});
-        isAudioPlaying = true;
-      }
-
-      // Drift korrigieren
-      syncAudioTime();
-
-      // Idle-Timer resetten
-      if (scrollIdleTimer) clearTimeout(scrollIdleTimer);
-      scrollIdleTimer = setTimeout(() => {
-        scrollIdleTimer = null;
-        audio.pause();
-        isAudioPlaying = false;
-      }, 250);
-    }
-
-    // ScrollTrigger Update als Trigger nutzen
-    if (typeof ScrollTrigger !== 'undefined') {
-      ScrollTrigger.addEventListener('refresh', () => syncAudioTime());
-      // Lenis Scroll feuert ScrollTrigger.update — wir hängen uns in das Scroll-Event
-    }
-
-    // Direkter Scroll-Listener als Activity-Indikator
-    window.addEventListener('scroll', onScrollActivity, { passive: true });
-
-    // Wenn Video seeked (durch GSAP scrub) → Audio re-syncen
-    video.addEventListener('seeked', syncAudioTime);
   }
 })();
