@@ -156,14 +156,24 @@
         console.warn('[Hero Video] GSAP/ScrollTrigger not loaded');
         return;
       }
+
+      // PIN-MODE: Hero bleibt am Bildschirm haften, während das Video
+      // scroll-gesteuert von 0 → duration läuft. Erst danach wird das
+      // Pin freigegeben und die nachfolgenden Sections scrollen normal rein.
+      //
+      // end: '+=120%' = ab Pin-Start noch 120% der Viewport-Höhe weiter-
+      // scrollen bevor das Pin endet → komfortable Distanz, nicht zu lang
       scrollTriggerInstance = gsap.to(video, {
         currentTime: video.duration || 8,
         ease: 'none',
         scrollTrigger: {
           trigger: heroSection,
           start: 'top top',
-          end: 'bottom top',
-          scrub: 0.8, // etwas mehr Smoothing → ruhigeres Scrubben
+          end: '+=120%',
+          scrub: 0.8,
+          pin: true,
+          pinSpacing: true,
+          anticipatePin: 1,
           invalidateOnRefresh: true
         }
       });
