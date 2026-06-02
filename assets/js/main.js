@@ -85,30 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
       duration: 0.7,
     }, '-=0.5');
 
-  /* ── Hero Parallax on Scroll — auf Bild angewendet ───── */
-  gsap.to('.hero__bg', {
-    yPercent: 12,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: '#start',
-      start: 'top top',
-      end: 'bottom top',
-      scrub: true,
-    },
-  });
-
-  // Fade out hero content on scroll
-  gsap.to('.hero__content', {
-    opacity: 0,
-    y: -40,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: '#start',
-      start: 'top top',
-      end: '35% top',
-      scrub: true,
-    },
-  });
+  /* Hero Parallax + Content Fade-out wurden nach hero-video.js verschoben
+     (scroll-driven video + text outro animation) */
 
   /* ── Scroll Reveal (global) ───────────────────────────── */
   function createReveal(selector, extra = {}) {
