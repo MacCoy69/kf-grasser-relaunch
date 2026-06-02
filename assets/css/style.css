@@ -537,6 +537,83 @@ input, textarea, select { font: inherit; }
   pointer-events: none;
 }
 
+/* ── Hero Audio Toggle ──────────────────────────────────── */
+#hero-audio { display: none; }
+
+.hero__audio-toggle {
+  position: absolute;
+  bottom: clamp(24px, 4vh, 48px);
+  left: clamp(20px, 5vw, 60px);
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px 10px 12px;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(17,17,17,0.08);
+  border-radius: 999px;
+  color: var(--text);
+  font-family: var(--font-nav);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.3s var(--ease),
+    border-color 0.3s var(--ease),
+    color 0.3s var(--ease),
+    transform 0.3s var(--ease),
+    box-shadow 0.3s var(--ease);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.hero__audio-toggle:hover {
+  background: rgba(255,255,255,0.92);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+
+.hero__audio-toggle:active { transform: translateY(0); }
+
+.hero__audio-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* Default state (muted): show muted icon, hide unmuted */
+.hero__audio-toggle .hero__audio-icon--unmuted { display: none; }
+.hero__audio-toggle .hero__audio-icon--muted   { display: block; }
+
+/* When sound is on, swap icons */
+.hero__audio-toggle.is-on .hero__audio-icon--muted   { display: none; }
+.hero__audio-toggle.is-on .hero__audio-icon--unmuted { display: block; }
+.hero__audio-toggle.is-on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.hero__audio-toggle.is-on:hover {
+  background: var(--accent-dark);
+  border-color: var(--accent-dark);
+  color: #fff;
+}
+
+.hero__audio-label {
+  position: relative;
+  top: 1px; /* optical baseline */
+}
+
+/* Hide on mobile — mobile autoplay loops without user-controlled audio */
+@media (max-width: 767px), (pointer: coarse) {
+  .hero__audio-toggle { display: none; }
+}
+
 /* ── Quote Section ──────────────────────────────────────── */
 #zitat {
   padding: clamp(80px, 12vh, 140px) 0;
