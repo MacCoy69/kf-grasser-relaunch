@@ -37,3 +37,19 @@ build/
 
 # Claude local
 .claude/settings.local.json
+
+# Originalfotos (nur Web-Varianten in relaunch/img/ werden versioniert)
+relaunch/18-11-26/
+relaunch/img/neu-2026-11/*.jpg
+neue Fotos/
+images/alt-jimdo/
+
+# Interne Projektunterlagen (Repo ist öffentlich)
+/*.docx
+/*.pdf
+PROJEKT-UEBERBLICK.md
+WEBSITE-STATUS.md
+preisliste-grasser.md
+recherche/
+Claude outputs/
+_to_delete/
