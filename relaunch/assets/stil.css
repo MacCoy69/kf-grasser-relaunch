@@ -246,3 +246,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--indischrot);outline
 .breitbild{margin:0 0 clamp(1.5rem,3.5vw,2.5rem)}
 .breitbild img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover}
 @media (max-width:599px){.breitbild img{aspect-ratio:4/3}}
+.komfort{list-style:none;margin:clamp(2rem,4vw,3rem) 0 0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);border-top:1px solid var(--linie)}
+.komfort li{padding:1.25rem 0;border-bottom:1px solid var(--linie)}
+.komfort b{display:block;font-family:var(--grotesk);font-weight:600;font-size:1rem}
+.komfort p{margin-top:.35rem;color:var(--tinte-matt);font-size:.97rem;max-width:44ch}
+@media (min-width:900px){.komfort{grid-template-columns:repeat(3,minmax(0,1fr));border-bottom:1px solid var(--linie)}.komfort li{border-bottom:0;padding:1.5rem 1.5rem 1.5rem 0}.komfort li + li{border-left:1px solid var(--linie);padding-left:1.5rem}}
