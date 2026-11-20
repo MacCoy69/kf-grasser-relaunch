@@ -20,6 +20,24 @@
         ],
         "createdAt": "2026-11-20T16:59:45.474Z",
         "reason": "Fehlalarm: Inhalte der Bänder .block/.leiste sind über .innen (padding var(--rand)) eingerückt; Screenshots 1024px und 375px zeigen ausreichend Abstand"
+      },
+      {
+        "rule": "hero-eyebrow-chip",
+        "value": "*",
+        "files": [
+          "relaunch/oldtimer-service.html"
+        ],
+        "createdAt": "2026-11-20T17:10:53.367Z",
+        "reason": "Eyebrow ist Bestandteil der vom Kunden am 03.11.2026 freigegebenen Designrichtung A (WEBSITE-STATUS.md), seitenweit einheitlich"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "relaunch/oldtimer-service.html"
+        ],
+        "createdAt": "2026-11-20T17:10:53.385Z",
+        "reason": "Fehlalarm: Inhalte der Bänder .block sind über .innen (padding var(--rand)) eingerückt; Screenshots 1024px und 375px zeigen ausreichend Abstand"
       }
     ]
   }
