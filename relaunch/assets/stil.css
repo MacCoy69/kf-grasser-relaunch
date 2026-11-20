@@ -245,6 +245,17 @@ section{scroll-margin-top:84px}
 .fuss-kontakt{font-family:var(--grotesk);font-size:.9rem;margin-top:.9rem;line-height:1.9}
 .fuss-kontakt a{color:var(--tinte);text-decoration:none}
 .fuss-kontakt a:hover,.fuss-kontakt a:focus-visible{color:var(--indischrot)}
+/* Rechtstexte */
+.rechtstext{max-width:72ch}
+.rechtstext h1{font-size:clamp(1.9rem,4.4vw,2.8rem);margin:.55rem 0 1.5rem}
+.rechtstext h2{font-size:clamp(1.2rem,2.4vw,1.45rem);margin:2.4rem 0 .7rem}
+.rechtstext h3{font-size:1.05rem;margin:1.6rem 0 .5rem}
+.rechtstext p,.rechtstext ul{margin:0 0 .9rem}
+.rechtstext ul{padding-left:1.2rem}
+.rechtstext li{margin-bottom:.35rem}
+.rechtstext a{color:var(--tinte);text-decoration-color:var(--indischrot);text-underline-offset:.2em}
+.rechtstext .stand{font-family:var(--grotesk);font-size:.85rem;color:var(--tinte-matt);margin-top:2.4rem}
+
 /* Formular */
 .formular{background:var(--papier);border:1px solid var(--linie);padding:clamp(1.25rem,3vw,2rem);display:grid;gap:1rem}
 .formular-titel{font-size:clamp(1.3rem,2.6vw,1.6rem)}
@@ -277,6 +288,8 @@ section{scroll-margin-top:84px}
 .fuss a{text-decoration:none;color:var(--tinte-matt)}
 .fuss a:hover,.fuss a:focus-visible{color:var(--tinte)}
 .fuss-zeile{border-top:1px solid var(--linie);margin-top:2rem;padding-top:1.2rem;font-family:var(--grotesk);font-size:.78rem;color:var(--tinte-matt);display:flex;flex-wrap:wrap;gap:.6rem 1.4rem}
+.fuss-zeile a{color:var(--tinte-matt);text-underline-offset:.2em;padding-block:.4rem}
+.fuss-zeile a:hover,.fuss-zeile a:focus-visible{color:var(--indischrot)}
 
 .sprung{position:absolute;left:-9999px;top:0;z-index:40;font-family:var(--grotesk);font-weight:600;font-size:.88rem;background:var(--tinte);color:var(--papier);padding:.7rem 1.1rem;text-decoration:none}
 .sprung:focus{left:.5rem;top:.5rem}
