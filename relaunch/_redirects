@@ -1,0 +1,19 @@
+# Weiterleitungen der alten Jimdo-Adressen (Search Console, Oktober 2026).
+# Netlify ignoriert den abschließenden Schrägstrich beim Abgleich.
+# Umlaute in Jimdo-Pfaden: kodierte und unkodierte Schreibweise.
+
+/about                                         /impressum             301
+/sitemap                                       /                      301
+
+/menü/kontakt                                  /kontakt               301
+/men%C3%BC/kontakt                             /kontakt               301
+/menü/öffnungszeiten                           /kontakt               301
+/men%C3%BC/%C3%B6ffnungszeiten                 /kontakt               301
+/menü/grasser-s-sportwagenservice              /sportwagenservice     301
+/men%C3%BC/grasser-s-sportwagenservice         /sportwagenservice     301
+/menü/leistungen-im-überblick                  /werkstattleistungen   301
+/men%C3%BC/leistungen-im-%C3%BCberblick        /werkstattleistungen   301
+
+# Alle übrigen alten Menüseiten auf die Startseite
+/menü/*                                        /                      301
+/men%C3%BC/*                                   /                      301
