@@ -38,6 +38,42 @@
         ],
         "createdAt": "2026-11-20T17:10:53.385Z",
         "reason": "Fehlalarm: Inhalte der Bänder .block sind über .innen (padding var(--rand)) eingerückt; Screenshots 1024px und 375px zeigen ausreichend Abstand"
+      },
+      {
+        "rule": "hero-eyebrow-chip",
+        "value": "*",
+        "files": [
+          "relaunch/sportwagenservice.html"
+        ],
+        "createdAt": "2026-11-20T17:28:52.743Z",
+        "reason": "Eyebrow ist Bestandteil der vom Kunden am 03.11.2026 freigegebenen Designrichtung A (WEBSITE-STATUS.md), seitenweit einheitlich"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "relaunch/sportwagenservice.html"
+        ],
+        "createdAt": "2026-11-20T17:28:52.758Z",
+        "reason": "Fehlalarm: Inhalte der Bänder .block/.leiste sind über .innen (padding var(--rand)) eingerückt; Screenshots 375/880/1280px zeigen ausreichend Abstand"
+      },
+      {
+        "rule": "hero-eyebrow-chip",
+        "value": "*",
+        "files": [
+          "relaunch/ueber-uns.html"
+        ],
+        "createdAt": "2026-11-20T17:28:52.836Z",
+        "reason": "Eyebrow ist Bestandteil der vom Kunden am 03.11.2026 freigegebenen Designrichtung A (WEBSITE-STATUS.md), seitenweit einheitlich"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "relaunch/ueber-uns.html"
+        ],
+        "createdAt": "2026-11-20T17:28:52.850Z",
+        "reason": "Fehlalarm: Inhalte der Bänder .block/.leiste sind über .innen (padding var(--rand)) eingerückt; Screenshots 375/880/1280px zeigen ausreichend Abstand"
       }
     ]
   }

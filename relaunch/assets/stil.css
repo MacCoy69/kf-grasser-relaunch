@@ -78,7 +78,27 @@ p{margin:0}
 .hauptnav a:hover,.hauptnav a:focus-visible{color:var(--tinte);border-bottom-color:var(--indischrot)}
 .ruf{font-family:var(--grotesk);font-weight:600;font-size:.84rem;text-decoration:none;color:var(--indischrot);border:1.5px solid var(--indischrot);padding:.5rem .95rem;white-space:nowrap}
 .ruf:hover,.ruf:focus-visible{background:var(--indischrot);color:var(--papier)}
-@media (max-width:860px){.hauptnav{display:none}}
+.hauptnav a{white-space:nowrap}
+.menue-knopf{display:none;flex:0 0 auto;width:44px;height:44px;align-items:center;justify-content:center;flex-direction:column;gap:5px;background:none;border:1.5px solid var(--linie);color:var(--tinte);cursor:pointer;padding:0}
+.menue-knopf span{display:block;width:18px;height:1.5px;background:currentColor;transition:transform .25s ease,opacity .2s ease}
+.menue-knopf[aria-expanded="true"] span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.menue-knopf[aria-expanded="true"] span:nth-child(2){opacity:0}
+.menue-knopf[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.menue-knopf:focus-visible{outline:2px solid var(--indischrot);outline-offset:2px}
+@media (max-width:1040px){
+  .menue-knopf{display:flex}
+  .ruf{margin-left:auto}
+  .hauptnav{display:none;position:absolute;top:100%;left:0;right:0;margin:0;flex-direction:column;gap:0;background:var(--papier);border-bottom:1px solid var(--linie);padding:.5rem var(--rand-r) 1.25rem var(--rand);font-size:1.05rem;box-shadow:0 18px 30px -24px rgba(0,0,0,.35)}
+  .kopf.offen .hauptnav{display:flex}
+  .hauptnav a{padding:.8rem 0;border-bottom:1px solid var(--linie);min-height:44px;display:flex;align-items:center}
+  .hauptnav a:last-child{border-bottom:0}
+  .hauptnav a[aria-current="page"]{color:var(--indischrot);border-bottom-color:var(--linie)}
+}
+@media (max-width:480px){
+  .kopf .innen{gap:.6rem}
+  .marke img{width:118px}
+  .ruf{padding:.5rem .7rem;font-size:.8rem}
+}
 
 /* ---------- Auftakt ---------- */
 .auftakt .innen{padding-block:clamp(2.5rem,7vw,5rem) 0}

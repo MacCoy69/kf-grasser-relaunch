@@ -36,8 +36,11 @@ im Ausstellungsraum (Nr. 15–24). Eingebaut am 18.11.2026:
 | 15 | hoch | Fabian in der Halle, Porsche auf Hebe- und Scherenbühne | `fabian-grasser-porsche-werkstatt-{534,1067}.webp` | **Auftakt `/porsche-service`** (20.11.2026) |
 | 9 | quer | Schwarzer 911 auf der Hebebühne, weißer 911 und Porsche auf Scherenbühne | `porsche-911-hebebuehne-werkstatt-rosstal-{800,1600}.webp` | **Breitbild `/porsche-service`**, Reparatur und Technik (20.11.2026) |
 | 22 | hoch | Fabian lehnt an silbernem, luftgekühltem 911 Cabriolet im Ausstellungsraum | `fabian-grasser-oldtimer-911-cabriolet-{534,1067}.webp` | **Auftakt `/oldtimer-service`** (20.11.2026) |
+| 12 | quer | Halle mit Sportwagen auf Hebe- und Scherenbühne | `sportwagen-werkstatt-rosstal-halle-{800,1600}.webp` | **Breitbild `/sportwagenservice`** (20.11.2026) |
+| 16 | hoch | Fabian frontal in der Halle, Porsche auf Hebe- und Scherenbühne | `fabian-grasser-kfz-meister-rosstal-{534,1067}.webp` | **`/ueber-uns`, Inhaber** (20.11.2026) |
+| 6 | quer | Weite Werkstatthalle mit Tageslicht | `werkstatthalle-rosstal-weit-{800,1600}.webp` | **Breitbild `/ueber-uns`** (20.11.2026) |
 
-Reserve für kommende Seiten: Nr. 2, 6, 12 (Hebebühne quer), Nr. 16 und 24 (Fabian, hoch bzw. quer, `/ueber-uns`),
+Reserve für kommende Seiten: Nr. 2 (Hebebühne quer), Nr. 24 (Fabian quer),
 Nr. 19 (Fabian vor 996 Turbo im Ausstellungsraum), Nr. 21 und 23 (Varianten zu 22).
 
 ## Noch nicht abgedeckt
