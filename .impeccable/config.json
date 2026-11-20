@@ -74,6 +74,24 @@
         ],
         "createdAt": "2026-11-20T17:28:52.850Z",
         "reason": "Fehlalarm: Inhalte der Bänder .block/.leiste sind über .innen (padding var(--rand)) eingerückt; Screenshots 375/880/1280px zeigen ausreichend Abstand"
+      },
+      {
+        "rule": "hero-eyebrow-chip",
+        "value": "*",
+        "files": [
+          "relaunch/karriere.html"
+        ],
+        "createdAt": "2026-11-20T17:38:23.213Z",
+        "reason": "Eyebrow ist Bestandteil der vom Kunden am 03.11.2026 freigegebenen Designrichtung A (WEBSITE-STATUS.md), seitenweit einheitlich"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "relaunch/karriere.html"
+        ],
+        "createdAt": "2026-11-20T17:38:23.237Z",
+        "reason": "Fehlalarm: Inhalte der Bänder .block sind über .innen (padding var(--rand)) eingerückt; Screenshots 375/1280px zeigen ausreichend Abstand"
       }
     ]
   }

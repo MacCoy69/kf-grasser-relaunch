@@ -18,7 +18,7 @@ zeigt teilweise die alte Garage — vor Verwendung prüfen.
 | `porsche-964-showroom-klassiker.jpg` | hoch 2709×4056 | Luftgekühlter 964 neben aktuellem 911, Bücher im Vordergrund | **Old- und Youngtimer.** Rotstich leicht zurückgenommen |
 | `grasser-schriftzug-fassade.jpg` | hoch 2832×4240 | Schriftzug an der Fassade, Untersicht | Kontakt und Anfahrt |
 | `grasser-gebaeude-rosstal-aussen.jpg` | quer 4071×2719 | Betriebsgebäude über Eck mit Schriftzug und Glasfassade | **OG-Bild**, später Kontaktseite |
-| `kfz-werkstatt-rosstal-team.jpg` | quer 4240×2832 | Mitarbeiter in Grasser-Jacke an geöffneter Motorhaube, zweiter Mann im Hintergrund | **Karriere.** Nicht auf Startseite oder Porsche-Seite: das Fahrzeug ist ein Kleinwagen, das widerspricht der Positionierung |
+| `kfz-werkstatt-rosstal-team.jpg` | quer 4240×2832 | Mitarbeiter in Grasser-Jacke an geöffneter Motorhaube, zweiter Mann im Hintergrund | **Karriere**, eingebaut 20.11.2026 als `kfz-mechatroniker-werkstatt-rosstal-team-{800,1600}.webp`. Nicht auf Startseite oder Porsche-Seite: das Fahrzeug ist ein Kleinwagen, das widerspricht der Positionierung |
 | `nicht-verwenden-kind-ohne-einwilligung.jpg` | hoch 2832×4240 | Kleinkind im Kofferraum eines 911 | **Nicht verwenden.** Erkennbares Kind, schriftliche Einwilligung der Eltern liegt nicht vor |
 
 ## Zweites Shooting, 24 Aufnahmen (Originale in `neue Fotos/Grasser Webseite/`, Dateinamen `Zehnsinger.com-<Nr>.jpg`)
@@ -39,6 +39,7 @@ im Ausstellungsraum (Nr. 15–24). Eingebaut am 18.11.2026:
 | 12 | quer | Halle mit Sportwagen auf Hebe- und Scherenbühne | `sportwagen-werkstatt-rosstal-halle-{800,1600}.webp` | **Breitbild `/sportwagenservice`** (20.11.2026) |
 | 16 | hoch | Fabian frontal in der Halle, Porsche auf Hebe- und Scherenbühne | `fabian-grasser-kfz-meister-rosstal-{534,1067}.webp` | **`/ueber-uns`, Inhaber** (20.11.2026) |
 | 6 | quer | Weite Werkstatthalle mit Tageslicht | `werkstatthalle-rosstal-weit-{800,1600}.webp` | **Breitbild `/ueber-uns`** (20.11.2026) |
+| 4 | hoch | Halle mit Tageslicht, schwarzer 911 auf Hebebühne, weißer 911 | `kfz-werkstatt-rosstal-porsche-halle-hoch-{534,1067}.webp` | **Auftakt `/karriere`** (20.11.2026) |
 
 Reserve für kommende Seiten: Nr. 2 (Hebebühne quer), Nr. 24 (Fabian quer),
 Nr. 19 (Fabian vor 996 Turbo im Ausstellungsraum), Nr. 21 und 23 (Varianten zu 22).
